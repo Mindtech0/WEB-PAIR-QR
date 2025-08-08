@@ -61,25 +61,23 @@ router.get('/', async (req, res) => {
                         await delay(10000);
                         if (fs.existsSync('./auth_info_baileys/creds.json'));
 
-                        const auth_path = './auth_info_baileys/';
-                        let user = Smd.user.id;
+      const auth_path = './auth_info_baileys/';
+        let user = Smd.user.id;
 
-                        // Define randomMegaId function to generate random IDs
-                        function randomMegaId(length = 6, numberLength = 4) {
-                            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                            let result = '';
-                            for (let i = 0; i < length; i++) {
-                                result += characters.charAt(Math.floor(Math.random() * characters.length));
-                            }
-                            const number = Math.floor(Math.random() * Math.pow(10, numberLength));
-                            return `${result}${number}`;
-                        }
+        // 🔐 HMAC-secure session logic
+        const rawCreds = fs.readFileSync(auth_path + 'creds.json');
+        const sessionBase64 = Buffer.from(rawCreds).toString('base64');
 
-                        // Upload credentials to Mega
-                        const mega_url = await upload(fs.createReadStream(auth_path + 'creds.json'), `${randomMegaId()}.json`);
-                        const Id_session = mega_url.replace('https://mega.nz/file/', '');
+        const hmac = crypto.createHmac('sha256', process.env.HMAC_SECRET);
+        hmac.update(sessionBase64);
+        const signature = hmac.digest('hex');
 
-                        const Scan_Id = Id_session;
+        const sessionToken = JSON.stringify({
+            session: sessionBase64,
+            sig: signature
+        });
+
+        const Scan_Id = Buffer.from(sessionToken).toString('base64'); // 🔑 This is what gets sent
 
                         let msgsss = await Smd.sendMessage(user, { text: Scan_Id });
                         await Smd.sendMessage(user, { text: MESSAGE }, { quoted: msgsss });
