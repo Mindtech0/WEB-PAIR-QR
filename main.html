@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TERANCHAMP Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
   <style>
     body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #ff0080, #7928ca, #2afadf, #00c9ff);
+      background-size: 400% 400%;
+      animation: bgFlow 12s ease infinite;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'Roboto', 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #4e9f3d, #34d7b7, #55c7f7);
-      background-size: 300% 300%;
-      animation: gradientAnimation 10s ease infinite;
+      align-items: center;
     }
 
-    @keyframes gradientAnimation {
+    @keyframes bgFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
@@ -25,106 +29,109 @@
 
     h1 {
       color: white;
-      font-size: 3.5rem;
-      margin-bottom: 40px;
-      text-align: center;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      font-weight: 700;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 
     .btn {
-      width: 250px;
-      padding: 15px 25px;
+      padding: 1rem 2.5rem;
       margin: 10px;
-      background: transparent;
-      border-radius: 25px;
-      border: 2px solid #ffffff;
-      font-size: 18px;
+      border: 2px solid white;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.1rem;
       font-weight: bold;
       text-transform: uppercase;
-      color: white;
-      text-align: center;
+      border-radius: 50px;
+      cursor: pointer;
       position: relative;
       overflow: hidden;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
-    }
-
-    /* Add shine effect on hover */
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      height: 200%;
-      width: 200%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: skewX(45deg);
-      transition: all 0.5s;
-    }
-
-    .btn:hover::before {
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
+      transition: 0.3s ease;
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+      animation: pulse 2s infinite;
     }
 
     .btn:hover {
-      background-color: #ffffff;
-      color: #333;
-      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5);
+      background-color: white;
+      color: #000;
       transform: scale(1.05);
     }
 
-    .btn:active {
-      filter: brightness(0.9);
-      transform: scale(0.98);
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+      100% { transform: scale(1); }
     }
 
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      .btn {
-        width: 80%;
-        padding: 12px 20px;
-        font-size: 16px;
-      }
+    /* Floating GitHub icon */
+    .github {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 1.8rem;
+      color: white;
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
-    @media (min-width: 600px) and (max-width: 1024px) {
-      h1 {
-        font-size: 2.8rem;
-      }
-      .btn {
-        width: 220px;
-        padding: 14px 22px;
-      }
+    .github:hover {
+      color: #ff0080;
+      transform: scale(1.2);
     }
 
-    @media (min-width: 1024px) {
-      h1 {
-        font-size: 3.5rem;
-      }
-      .btn {
-        width: 250px;
-        padding: 15px 25px;
-      }
+    /* Sparkle effect */
+    .trail {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+      background: white;
+      border-radius: 50%;
+      animation: trailFade 0.5s linear forwards;
     }
 
+    @keyframes trailFade {
+      to {
+        opacity: 0;
+        transform: scale(2);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <button onclick="window.open(`/qr`)" class="btn">QR Code</button>
-  <button onclick="window.open(`/pair`)" class="btn">Pair Code</button>
-  <button onclick="window.open(`https://github.com/GlobalTechInfo`)" class="btn">GitHub</button>
-  <button onclick="window.open(`254717028877`)" class="btn">WhatsApp</button>
+  <div class="github" onclick="window.open('https://github.com/Mindtech0')">
+    <i class="fab fa-github"></i>
+  </div>
+
+  <h1>Welcome to TERANCHAMP</h1>
+
+  <button class="btn" onclick="playSound(); window.open('/qr')">QR Code</button>
+  <button class="btn" onclick="playSound(); window.open('/pair')">Pair Code</button>
+  <button class="btn" onclick="playSound(); window.open('https://github.com/Mindtech0')">GitHub</button>
+  <button class="btn" onclick="playSound(); window.open('https://wa.me/254717028877')">WhatsApp</button>
+
+  <audio id="clickSound" src="https://cdn.openai.com/chat-assets/The-Bonuses.mp3" preload="auto"></audio>
+
+  <script>
+    function playSound() {
+      document.getElementById("clickSound").play();
+    }
+
+    // Sparkle trail
+    document.addEventListener("mousemove", e => {
+      const trail = document.createElement("div");
+      trail.className = "trail";
+      trail.style.left = e.pageX + "px";
+      trail.style.top = e.pageY + "px";
+      document.body.appendChild(trail);
+      setTimeout(() => trail.remove(), 500);
+    });
+  </script>
 
 </body>
 </html>
